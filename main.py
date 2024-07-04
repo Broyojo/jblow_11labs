@@ -43,7 +43,9 @@ def assign_voices_to_characters(characters, available_voices):
 
 def generate_character_audio(character, text, voice_map):
     voice = voice_map[character]
-    audio = client.generate(text=text, voice=voice, model="eleven_multilingual_v2")
+    audio = client.generate(
+        text=text, voice=voice, model="eleven_multilingual_v2", stream=True
+    )
     return audio
 
 
