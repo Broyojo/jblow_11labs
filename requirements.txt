@@ -1,0 +1,4 @@
+elevenlabs
+numpy
+pydub
+tqdm
