@@ -43,9 +43,7 @@ def assign_voices_to_characters(characters, available_voices):
 
 def generate_character_audio(character, text, voice_map):
     voice = voice_map[character]
-    audio = client.generate(
-        text=text, voice=voice, model="eleven_multilingual_v2", stream=True
-    )
+    audio = client.generate(text=text, voice=voice, model="eleven_multilingual_v2")
     return audio
 
 
@@ -99,7 +97,10 @@ def main(args):
         dialogue, voice_map, args.pause_mean, args.pause_stdev
     )
 
-    output_file = f"{args.input_file.rsplit('.', 1)[0]}_output.wav"
+    if args.output:
+        output_file = args.output
+    else:
+        output_file = f"{args.input_file.rsplit('.', 1)[0]}_output.wav"
     conversation.export(output_file, format="wav")
 
     print(f"\nConversation audio generated and saved as '{output_file}'")
@@ -120,7 +121,7 @@ if __name__ == "__main__":
     parser.add_argument(
         "--pause-mean",
         type=int,
-        default=500,
+        default=300,
         help="Mean duration of pause (in ms) between each line of dialogue",
     )
     parser.add_argument(
@@ -128,6 +129,13 @@ if __name__ == "__main__":
         type=int,
         default=100,
         help="Standard deviation of pause duration (in ms)",
+    )
+    parser.add_argument(
+        "--output",
+        "-o",
+        type=str,
+        default="dialogue_output.wav",
+        help="Path to save the output audio file",
     )
     args = parser.parse_args()
 
